@@ -1,0 +1,601 @@
+{
+  "isr": {
+    "anio": 2026,
+    "tarifas": {
+      "diaria": {
+        "descripcion": "diaria (art. 96 LISR y 175 RLISR)",
+        "dias": 1,
+        "tramos": [
+          {
+            "limiteInferior": 0.01,
+            "limiteSuperior": 27.78,
+            "cuotaFija": 0.0,
+            "tasa": 1.92
+          },
+          {
+            "limiteInferior": 27.79,
+            "limiteSuperior": 235.81,
+            "cuotaFija": 0.53,
+            "tasa": 6.4
+          },
+          {
+            "limiteInferior": 235.82,
+            "limiteSuperior": 414.41,
+            "cuotaFija": 13.85,
+            "tasa": 10.88
+          },
+          {
+            "limiteInferior": 414.42,
+            "limiteSuperior": 481.73,
+            "cuotaFija": 33.28,
+            "tasa": 16.0
+          },
+          {
+            "limiteInferior": 481.74,
+            "limiteSuperior": 576.76,
+            "cuotaFija": 44.05,
+            "tasa": 17.92
+          },
+          {
+            "limiteInferior": 576.77,
+            "limiteSuperior": 1163.25,
+            "cuotaFija": 61.08,
+            "tasa": 21.36
+          },
+          {
+            "limiteInferior": 1163.26,
+            "limiteSuperior": 1833.44,
+            "cuotaFija": 186.35,
+            "tasa": 23.52
+          },
+          {
+            "limiteInferior": 1833.45,
+            "limiteSuperior": 3500.35,
+            "cuotaFija": 343.98,
+            "tasa": 30.0
+          },
+          {
+            "limiteInferior": 3500.36,
+            "limiteSuperior": 4667.13,
+            "cuotaFija": 844.05,
+            "tasa": 32.0
+          },
+          {
+            "limiteInferior": 4667.14,
+            "limiteSuperior": 14001.38,
+            "cuotaFija": 1217.42,
+            "tasa": 34.0
+          },
+          {
+            "limiteInferior": 14001.39,
+            "limiteSuperior": null,
+            "cuotaFija": 4391.07,
+            "tasa": 35.0
+          }
+        ]
+      },
+      "semanal": {
+        "descripcion": "semanal (7 días)",
+        "dias": 7,
+        "tramos": [
+          {
+            "limiteInferior": 0.01,
+            "limiteSuperior": 194.46,
+            "cuotaFija": 0.0,
+            "tasa": 1.92
+          },
+          {
+            "limiteInferior": 194.47,
+            "limiteSuperior": 1650.67,
+            "cuotaFija": 3.71,
+            "tasa": 6.4
+          },
+          {
+            "limiteInferior": 1650.68,
+            "limiteSuperior": 2900.87,
+            "cuotaFija": 96.95,
+            "tasa": 10.88
+          },
+          {
+            "limiteInferior": 2900.88,
+            "limiteSuperior": 3372.11,
+            "cuotaFija": 232.96,
+            "tasa": 16.0
+          },
+          {
+            "limiteInferior": 3372.12,
+            "limiteSuperior": 4037.32,
+            "cuotaFija": 308.35,
+            "tasa": 17.92
+          },
+          {
+            "limiteInferior": 4037.33,
+            "limiteSuperior": 8142.75,
+            "cuotaFija": 427.56,
+            "tasa": 21.36
+          },
+          {
+            "limiteInferior": 8142.76,
+            "limiteSuperior": 12834.08,
+            "cuotaFija": 1304.45,
+            "tasa": 23.52
+          },
+          {
+            "limiteInferior": 12834.09,
+            "limiteSuperior": 24502.45,
+            "cuotaFija": 2407.86,
+            "tasa": 30.0
+          },
+          {
+            "limiteInferior": 24502.46,
+            "limiteSuperior": 32669.91,
+            "cuotaFija": 5908.35,
+            "tasa": 32.0
+          },
+          {
+            "limiteInferior": 32669.92,
+            "limiteSuperior": 98009.66,
+            "cuotaFija": 8521.94,
+            "tasa": 34.0
+          },
+          {
+            "limiteInferior": 98009.67,
+            "limiteSuperior": null,
+            "cuotaFija": 30737.49,
+            "tasa": 35.0
+          }
+        ]
+      },
+      "decenal": {
+        "descripcion": "decenal (10 días)",
+        "dias": 10,
+        "tramos": [
+          {
+            "limiteInferior": 0.01,
+            "limiteSuperior": 277.8,
+            "cuotaFija": 0.0,
+            "tasa": 1.92
+          },
+          {
+            "limiteInferior": 277.81,
+            "limiteSuperior": 2358.1,
+            "cuotaFija": 5.3,
+            "tasa": 6.4
+          },
+          {
+            "limiteInferior": 2358.11,
+            "limiteSuperior": 4144.1,
+            "cuotaFija": 138.5,
+            "tasa": 10.88
+          },
+          {
+            "limiteInferior": 4144.11,
+            "limiteSuperior": 4817.3,
+            "cuotaFija": 332.8,
+            "tasa": 16.0
+          },
+          {
+            "limiteInferior": 4817.31,
+            "limiteSuperior": 5767.6,
+            "cuotaFija": 440.5,
+            "tasa": 17.92
+          },
+          {
+            "limiteInferior": 5767.61,
+            "limiteSuperior": 11632.5,
+            "cuotaFija": 610.8,
+            "tasa": 21.36
+          },
+          {
+            "limiteInferior": 11632.51,
+            "limiteSuperior": 18334.4,
+            "cuotaFija": 1863.5,
+            "tasa": 23.52
+          },
+          {
+            "limiteInferior": 18334.41,
+            "limiteSuperior": 35003.5,
+            "cuotaFija": 3439.8,
+            "tasa": 30.0
+          },
+          {
+            "limiteInferior": 35003.51,
+            "limiteSuperior": 46671.3,
+            "cuotaFija": 8440.5,
+            "tasa": 32.0
+          },
+          {
+            "limiteInferior": 46671.31,
+            "limiteSuperior": 140013.8,
+            "cuotaFija": 12174.2,
+            "tasa": 34.0
+          },
+          {
+            "limiteInferior": 140013.81,
+            "limiteSuperior": null,
+            "cuotaFija": 43910.7,
+            "tasa": 35.0
+          }
+        ]
+      },
+      "quincenal": {
+        "descripcion": "quincenal (15 días)",
+        "dias": 15,
+        "tramos": [
+          {
+            "limiteInferior": 0.01,
+            "limiteSuperior": 416.7,
+            "cuotaFija": 0.0,
+            "tasa": 1.92
+          },
+          {
+            "limiteInferior": 416.71,
+            "limiteSuperior": 3537.15,
+            "cuotaFija": 7.95,
+            "tasa": 6.4
+          },
+          {
+            "limiteInferior": 3537.16,
+            "limiteSuperior": 6216.15,
+            "cuotaFija": 207.75,
+            "tasa": 10.88
+          },
+          {
+            "limiteInferior": 6216.16,
+            "limiteSuperior": 7225.95,
+            "cuotaFija": 499.2,
+            "tasa": 16.0
+          },
+          {
+            "limiteInferior": 7225.96,
+            "limiteSuperior": 8651.4,
+            "cuotaFija": 660.75,
+            "tasa": 17.92
+          },
+          {
+            "limiteInferior": 8651.41,
+            "limiteSuperior": 17448.75,
+            "cuotaFija": 916.2,
+            "tasa": 21.36
+          },
+          {
+            "limiteInferior": 17448.76,
+            "limiteSuperior": 27501.6,
+            "cuotaFija": 2795.25,
+            "tasa": 23.52
+          },
+          {
+            "limiteInferior": 27501.61,
+            "limiteSuperior": 52505.25,
+            "cuotaFija": 5159.7,
+            "tasa": 30.0
+          },
+          {
+            "limiteInferior": 52505.26,
+            "limiteSuperior": 70006.95,
+            "cuotaFija": 12660.75,
+            "tasa": 32.0
+          },
+          {
+            "limiteInferior": 70006.96,
+            "limiteSuperior": 210020.7,
+            "cuotaFija": 18261.3,
+            "tasa": 34.0
+          },
+          {
+            "limiteInferior": 210020.71,
+            "limiteSuperior": null,
+            "cuotaFija": 65866.05,
+            "tasa": 35.0
+          }
+        ]
+      },
+      "mensual": {
+        "descripcion": "mensual (art. 96 LISR)",
+        "dias": 30.4,
+        "tramos": [
+          {
+            "limiteInferior": 0.01,
+            "limiteSuperior": 844.59,
+            "cuotaFija": 0.0,
+            "tasa": 1.92
+          },
+          {
+            "limiteInferior": 844.6,
+            "limiteSuperior": 7168.51,
+            "cuotaFija": 16.22,
+            "tasa": 6.4
+          },
+          {
+            "limiteInferior": 7168.52,
+            "limiteSuperior": 12598.02,
+            "cuotaFija": 420.95,
+            "tasa": 10.88
+          },
+          {
+            "limiteInferior": 12598.03,
+            "limiteSuperior": 14644.64,
+            "cuotaFija": 1011.68,
+            "tasa": 16.0
+          },
+          {
+            "limiteInferior": 14644.65,
+            "limiteSuperior": 17533.64,
+            "cuotaFija": 1339.14,
+            "tasa": 17.92
+          },
+          {
+            "limiteInferior": 17533.65,
+            "limiteSuperior": 35362.83,
+            "cuotaFija": 1856.84,
+            "tasa": 21.36
+          },
+          {
+            "limiteInferior": 35362.84,
+            "limiteSuperior": 55736.68,
+            "cuotaFija": 5665.16,
+            "tasa": 23.52
+          },
+          {
+            "limiteInferior": 55736.69,
+            "limiteSuperior": 106410.5,
+            "cuotaFija": 10457.09,
+            "tasa": 30.0
+          },
+          {
+            "limiteInferior": 106410.51,
+            "limiteSuperior": 141880.66,
+            "cuotaFija": 25659.23,
+            "tasa": 32.0
+          },
+          {
+            "limiteInferior": 141880.67,
+            "limiteSuperior": 425641.99,
+            "cuotaFija": 37009.69,
+            "tasa": 34.0
+          },
+          {
+            "limiteInferior": 425642.0,
+            "limiteSuperior": null,
+            "cuotaFija": 133488.54,
+            "tasa": 35.0
+          }
+        ]
+      },
+      "anual": {
+        "descripcion": "anual 2026 (arts. 97 y 152 LISR)",
+        "dias": 365,
+        "tramos": [
+          {
+            "limiteInferior": 0.01,
+            "limiteSuperior": 10135.11,
+            "cuotaFija": 0.0,
+            "tasa": 1.92
+          },
+          {
+            "limiteInferior": 10135.12,
+            "limiteSuperior": 86022.11,
+            "cuotaFija": 194.59,
+            "tasa": 6.4
+          },
+          {
+            "limiteInferior": 86022.12,
+            "limiteSuperior": 151176.19,
+            "cuotaFija": 5051.37,
+            "tasa": 10.88
+          },
+          {
+            "limiteInferior": 151176.2,
+            "limiteSuperior": 175735.66,
+            "cuotaFija": 12140.13,
+            "tasa": 16.0
+          },
+          {
+            "limiteInferior": 175735.67,
+            "limiteSuperior": 210403.69,
+            "cuotaFija": 16069.64,
+            "tasa": 17.92
+          },
+          {
+            "limiteInferior": 210403.7,
+            "limiteSuperior": 424353.97,
+            "cuotaFija": 22282.14,
+            "tasa": 21.36
+          },
+          {
+            "limiteInferior": 424353.98,
+            "limiteSuperior": 668840.14,
+            "cuotaFija": 67981.92,
+            "tasa": 23.52
+          },
+          {
+            "limiteInferior": 668840.15,
+            "limiteSuperior": 1276925.98,
+            "cuotaFija": 125485.07,
+            "tasa": 30.0
+          },
+          {
+            "limiteInferior": 1276925.99,
+            "limiteSuperior": 1702567.97,
+            "cuotaFija": 307910.81,
+            "tasa": 32.0
+          },
+          {
+            "limiteInferior": 1702567.98,
+            "limiteSuperior": 5107703.92,
+            "cuotaFija": 444116.23,
+            "tasa": 34.0
+          },
+          {
+            "limiteInferior": 5107703.93,
+            "limiteSuperior": null,
+            "cuotaFija": 1601862.46,
+            "tasa": 35.0
+          }
+        ]
+      }
+    },
+    "fuente": {
+      "nombre": "Anexo 8 de la Resolución Miscelánea Fiscal para 2026 (SAT)",
+      "url": "https://www.sat.gob.mx/minisitio/NormatividadRMFyRGCE/documentos2026/rmf/anexos/Anexo-8-RMF-2026_DOF-28122025.pdf",
+      "consultado": "2026-11-02",
+      "publicacion": "DOF 28 de diciembre de 2025",
+      "fundamento": "Arts. 96, 97 y 152 de la LISR; art. 175 RLISR; regla 3.12.2 RMF"
+    }
+  },
+  "subsidio": {
+    "porcentajeUmaMensual": 15.02,
+    "limiteIngresoMensual": 11492.66,
+    "divisorDiario": 30.4,
+    "porcentajeTransitorioEnero": 15.59,
+    "fuente": {
+      "nombre": "Decreto que modifica el diverso que otorga el subsidio para el empleo (DOF)",
+      "url": "https://dof.gob.mx/nota_detalle.php?codigo=5777649&fecha=31/12/2025",
+      "consultado": "2026-11-02",
+      "publicacion": "DOF 31/12/2025",
+      "fundamento": "Artículo Segundo del Decreto y transitorios"
+    }
+  },
+  "uma": {
+    "diaria": 117.31,
+    "mensual": 3566.22,
+    "anual": 42794.64,
+    "vigenteDesde": "1 de febrero de 2026",
+    "fuente": {
+      "nombre": "Unidad de Medida y Actualización, INEGI (publicación en DOF)",
+      "url": "https://dof.gob.mx/nota_detalle.php?codigo=5778072&fecha=09/01/2026",
+      "consultado": "2026-11-02",
+      "fundamento": "Ley para Determinar el Valor de la UMA, art. 5"
+    }
+  },
+  "salarioMinimo": {
+    "general": 315.04,
+    "fronteraNorte": 440.87,
+    "anio": 2026,
+    "zonaCdmx": "general",
+    "fuente": {
+      "nombre": "Resolución del Consejo de Representantes de la CONASAMI (DOF)",
+      "url": "https://dof.gob.mx/nota_detalle.php?codigo=5775534&fecha=09/12/2025",
+      "consultado": "2026-11-02",
+      "fundamento": "Art. 94 y 570 LFT; CDMX pertenece a la Zona del Salario Mínimo General"
+    }
+  },
+  "iva": {
+    "tasaGeneral": 16.0,
+    "retencionPersonasFisicasFraccion": 0.6666666666666666,
+    "interesesHipotecariosExentos": true,
+    "fuente": {
+      "nombre": "Ley del Impuesto al Valor Agregado (Cámara de Diputados, texto vigente)",
+      "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/LIVA.pdf",
+      "consultado": "2026-11-02",
+      "ultimaReforma": "12-11-2021",
+      "fundamento": "Art. 1o. LIVA (tasa); art. 15 fr. X inciso d) (intereses hipotecarios exentos)"
+    },
+    "fuenteRetencion": {
+      "nombre": "Reglamento de la Ley del IVA",
+      "url": "https://www.diputados.gob.mx/LeyesBiblio/regley/Reg_LIVA_250914.pdf",
+      "consultado": "2026-11-02",
+      "fundamento": "Art. 3, fracción I RLIVA"
+    }
+  },
+  "imss": {
+    "obrero": [
+      {
+        "concepto": "Enfermedades y maternidad – excedente de 3 UMA",
+        "tasa": 0.4,
+        "base": "excedente",
+        "fundamento": "Art. 106 fr. II LSS y art. Décimo Noveno transitorio"
+      },
+      {
+        "concepto": "Enfermedades y maternidad – prestaciones en dinero",
+        "tasa": 0.25,
+        "base": "sbc",
+        "fundamento": "Art. 107 fr. II LSS"
+      },
+      {
+        "concepto": "Gastos médicos de pensionados",
+        "tasa": 0.375,
+        "base": "sbc",
+        "fundamento": "Art. 25 LSS"
+      },
+      {
+        "concepto": "Invalidez y vida",
+        "tasa": 0.625,
+        "base": "sbc",
+        "fundamento": "Art. 147 LSS"
+      },
+      {
+        "concepto": "Cesantía en edad avanzada y vejez",
+        "tasa": 1.125,
+        "base": "sbc",
+        "fundamento": "Art. 168 fr. II b) LSS"
+      }
+    ],
+    "umbralExcedenteVeces": 3.0,
+    "topeSbcVeces": 25.0,
+    "salarioMinimoExento": true,
+    "fuente": {
+      "nombre": "Ley del Seguro Social (Cámara de Diputados, texto vigente)",
+      "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/LSS.pdf",
+      "consultado": "2026-11-02",
+      "ultimaReforma": "15-01-2026",
+      "fundamento": "Arts. 25, 28, 36, 106, 107, 147 y 168 LSS. Las referencias a salario mínimo se aplican en UMA (reforma constitucional DOF 27-01-2016)"
+    }
+  },
+  "lft": {
+    "aguinaldoDias": 15.0,
+    "vacacionesPrimerAnio": 12.0,
+    "primaVacacional": 25.0,
+    "fuente": {
+      "nombre": "Ley Federal del Trabajo (Cámara de Diputados, texto vigente)",
+      "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/LFT.pdf",
+      "consultado": "2026-11-02",
+      "ultimaReforma": "14-05-2026",
+      "fundamento": "Arts. 76, 80 y 87 LFT"
+    }
+  },
+  "honorarios": {
+    "retencionIsrPersonaMoral": 10.0,
+    "fuente": {
+      "nombre": "Ley del Impuesto sobre la Renta (texto vigente)",
+      "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/LISR.pdf",
+      "consultado": "2026-11-02",
+      "ultimaReforma": "01-04-2024",
+      "fundamento": "Art. 106, último párrafo LISR"
+    }
+  },
+  "resico": {
+    "tablaMensual": [
+      {
+        "hasta": 25000.0,
+        "tasa": 1.0
+      },
+      {
+        "hasta": 50000.0,
+        "tasa": 1.1
+      },
+      {
+        "hasta": 83333.33,
+        "tasa": 1.5
+      },
+      {
+        "hasta": 208333.33,
+        "tasa": 2.0
+      },
+      {
+        "hasta": 3500000.0,
+        "tasa": 2.5
+      }
+    ],
+    "retencionPersonaMoral": 1.25,
+    "fuente": {
+      "nombre": "Ley del Impuesto sobre la Renta (texto vigente)",
+      "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/LISR.pdf",
+      "consultado": "2026-11-02",
+      "ultimaReforma": "01-04-2024",
+      "fundamento": "Arts. 113-E y 113-J LISR"
+    }
+  },
+  "generado": "2026-11-02T17:30:19-06:00",
+  "avisos": []
+}

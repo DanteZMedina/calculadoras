@@ -1,0 +1,6 @@
+{
+  "generado": "2026-11-02T17:30:19-06:00",
+  "avisos": [
+    "banxico: Sin BANXICO_TOKEN: configura el secreto del repositorio para obtener tasas de Banxico"
+  ]
+}

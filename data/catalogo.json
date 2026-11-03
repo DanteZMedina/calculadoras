@@ -1,0 +1,34 @@
+{
+  "_comentario": "Catálogo de referencias. Solo contiene nombres y enlaces oficiales; no contiene precios ni tasas. Los precios, descuentos y tasas se capturan desde estos enlaces en cada consulta y se guardan en el historial del navegador.",
+  "vehiculos": [
+    { "id": "seat-leon", "nombre": "SEAT León 150 hp", "marca": "SEAT", "url": "https://www.seat.mx/autos/leon", "promociones": "https://www.seat.mx/comprar-un-seat/promociones" },
+    { "id": "seat-ibiza", "nombre": "SEAT Ibiza 150 hp", "marca": "SEAT", "url": "https://www.seat.mx/autos/ibiza", "promociones": "https://www.seat.mx/comprar-un-seat/promociones" },
+    { "id": "kia-k4-hb", "nombre": "Kia K4 Hatchback", "marca": "Kia", "url": "https://www.kia.com/mx/showroom/k4-hatchback.html", "promociones": "https://www.kia.com/mx/shopping-tools/promociones-new.html" },
+    { "id": "byd-yuan-pro", "nombre": "BYD Yuan Pro DM-i", "marca": "BYD", "url": "https://www.byd.com/mx/car/BYD-Yuan-Pro", "promociones": "https://www.byd.com/mx/car/BYD-Yuan-Pro" },
+    { "id": "mazda3-hb", "nombre": "Mazda 3 Hatchback", "marca": "Mazda", "url": "https://www.mazda.mx/vehiculos/mazda-3-hatchback", "promociones": "https://www.mazda.mx/" }
+  ],
+  "bancos": [
+    { "nombre": "BBVA", "url": "https://www.bbva.mx" },
+    { "nombre": "Santander", "url": "https://www.santander.com.mx" },
+    { "nombre": "Banamex", "url": "https://www.banamex.com" },
+    { "nombre": "Banorte", "url": "https://www.banorte.com" },
+    { "nombre": "HSBC", "url": "https://www.hsbc.com.mx" },
+    { "nombre": "Scotiabank", "url": "https://www.scotiabank.com.mx" },
+    { "nombre": "VW Financial Services (SEAT)", "url": "https://www.vwfs.mx", "soloAuto": true },
+    { "nombre": "Infonavit", "url": "https://portalmx.infonavit.org.mx/", "soloHipoteca": true }
+  ],
+  "aseguradoras": [
+    { "nombre": "Quálitas", "url": "https://www.qualitas.com.mx" },
+    { "nombre": "GNP", "url": "https://www.gnp.com.mx" },
+    { "nombre": "AXA", "url": "https://axa.mx" },
+    { "nombre": "HDI", "url": "https://www.hdi.com.mx" },
+    { "nombre": "MAPFRE", "url": "https://www.mapfre.com.mx" },
+    { "nombre": "Chubb", "url": "https://www.chubb.com/mx-es/" }
+  ],
+  "referencias": [
+    { "nombre": "CONDUSEF – comparativos y simuladores de crédito", "url": "https://www.gob.mx/condusef" },
+    { "nombre": "Banco de México – Sistema de Información Económica", "url": "https://www.banxico.org.mx/SieInternet/" },
+    { "nombre": "AMIS – Asociación Mexicana de Instituciones de Seguros", "url": "https://sitio.amis.com.mx/" },
+    { "nombre": "Secretaría de Administración y Finanzas CDMX", "url": "https://www.finanzas.cdmx.gob.mx" }
+  ]
+}
