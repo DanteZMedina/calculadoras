@@ -1,4 +1,4 @@
-import { $, bindMoney, esc, mxn, money, pct, val } from '../util.js';
+import { $, bindMoney, esc, mxn, money, pct, lector, listaErrores } from '../util.js';
 import { amortizar, catEstimado } from '../finanzas.js';
 import { panelFuentes, tabla, resultado, enlaces } from '../componentes.js';
 import { referenciaBanxico } from './auto.js';
@@ -32,6 +32,7 @@ export function render(root, { fiscal, mercado, catalogo }) {
         <label>Comisión por apertura (%)<input name="comision" type="number" min="0" step="0.01" placeholder="0"></label>
         <label>Seguros mensuales (vida + daños)<span class="input-money"><input class="money" name="seguros" inputmode="decimal" placeholder="0.00"></span></label>
         <label>Abono extra a capital mensual<span class="input-money"><input class="money" name="extra" inputmode="decimal" placeholder="0.00"></span></label>
+        <label>Tu ingreso mensual neto (opcional)<span class="input-money"><input class="money" name="ingreso" inputmode="decimal" placeholder="0.00"></span></label>
       </div>
       <div class="links-inline" id="linksBanco"></div>
 
@@ -40,7 +41,7 @@ export function render(root, { fiscal, mercado, catalogo }) {
         <label>Avalúo<span class="input-money"><input class="money" name="avaluo" inputmode="decimal" placeholder="0.00"></span></label>
         <label>Gastos notariales, ISAI y registro (%)<input name="gastos" type="number" min="0" step="0.01" placeholder="cotización del notario"></label>
       </div>
-      <p class="hint">Los intereses de créditos hipotecarios para casa habitación están exentos de IVA (art. 15, fr. X, inciso d, LIVA). El ISAI de la CDMX lo determina la Secretaría de Administración y Finanzas; inclúyelo en el porcentaje que te cotice el notario.</p>
+      <p class="hint">Los intereses de créditos hipotecarios para casa habitación están exentos de IVA (art. 15, fr. X, inciso d, LIVA). El ISAI de la CDMX lo determina la Secretaría de Administración y Finanzas; inclúyelo en el porcentaje que te cotice el notario. Tasa fija todo el plazo; los seguros se capturan como monto mensual fijo de la cotización (algunos bancos los calculan sobre el saldo). No simula las reglas de Infonavit ni Fovissste.</p>
     </form>
 
     <section class="card results" aria-live="polite">
@@ -61,19 +62,26 @@ export function render(root, { fiscal, mercado, catalogo }) {
   const calcular = () => {
     const b = bancos.find((x) => x.nombre === f.banco.value);
     $('#linksBanco', root).innerHTML = b ? `Consulta la tasa en <a href="${b.url}" target="_blank" rel="noopener">${esc(b.nombre)}</a>` : '';
-    const valor = val(f, 'valor');
-    const tasa = val(f, 'tasa');
-    if (!(valor > 0) || f.tasa.value === '' || !(tasa >= 0)) {
-      $('#out', root).innerHTML = '<p class="empty">Captura el valor de la vivienda y la tasa para calcular.</p>'; return;
+    const { leer, errores } = lector(f);
+    const valor = leer('valor', { etiqueta: 'el valor de la vivienda', requerido: true, min: 0.01, moneda: true });
+    const engPct = leer('enganche', { etiqueta: 'el enganche', max: 99.99, pct: true });
+    const tasa = leer('tasa', { etiqueta: 'la tasa de interés anual', requerido: true, max: 100, pct: true });
+    const comPct = leer('comision', { etiqueta: 'la comisión por apertura', max: 100, pct: true });
+    const seguros = leer('seguros', { etiqueta: 'los seguros mensuales', moneda: true });
+    const extra = leer('extra', { etiqueta: 'el abono extra', moneda: true });
+    const ingreso = leer('ingreso', { etiqueta: 'tu ingreso mensual', moneda: true });
+    const gastosPct = leer('gastos', { etiqueta: 'los gastos notariales', max: 100, pct: true });
+    const avaluo = leer('avaluo', { etiqueta: 'el avalúo', moneda: true });
+    if (errores.length) {
+      $('#out', root).innerHTML = errores.length === 2 && f.valor.value === '' && f.tasa.value === ''
+        ? '<p class="empty">Captura el valor de la vivienda y la tasa para calcular.</p>' : listaErrores(errores);
+      return;
     }
-    const enganche = valor * (val(f, 'enganche') || 0) / 100;
+    const enganche = valor * engPct / 100;
     const credito = valor - enganche;
     const meses = +f.plazo.value * 12;
-    const comision = credito * (val(f, 'comision') || 0) / 100;
-    const seguros = val(f, 'seguros') || 0;
-    const extra = val(f, 'extra') || 0;
-    const gastos = valor * (val(f, 'gastos') || 0) / 100;
-    const avaluo = val(f, 'avaluo') || 0;
+    const comision = credito * comPct / 100;
+    const gastos = valor * gastosPct / 100;
 
     const base = amortizar(credito, tasa, meses, { cargoMensual: seguros });
     const conExtra = extra > 0 ? amortizar(credito, tasa, meses, { cargoMensual: seguros, extraMensual: extra }) : null;
@@ -91,6 +99,7 @@ export function render(root, { fiscal, mercado, catalogo }) {
         ${resultado('Seguros totales', mxn(base.totalCargos))}
         ${resultado('Total pagado al banco', mxn(totalPagos + comision))}
         ${resultado('Costo total de la vivienda', mxn(inicial + totalPagos), { nota: 'Pago inicial + todas las mensualidades' })}
+        ${ingreso > 0 ? resultado('Mensualidad / ingreso', pct(base.pago / ingreso * 100), { nota: 'Cada banco fija su propio límite; consúltalo en su simulador.' }) : ''}
       </div>
       ${conExtra ? `
       <div class="callout">

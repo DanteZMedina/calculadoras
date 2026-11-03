@@ -1,4 +1,4 @@
-import { $, bindMoney, esc, mxn, money, pct, val, setMoney, mesNombre, fecha } from '../util.js';
+import { $, bindMoney, esc, mxn, money, pct, setMoney, mesNombre, fecha, lector, listaErrores } from '../util.js';
 import { amortizar, catEstimado } from '../finanzas.js';
 import { panelFuentes, tabla, resultado, enlaces } from '../componentes.js';
 import * as hist from '../historial.js';
@@ -44,7 +44,7 @@ export function render(root, { fiscal, mercado, catalogo }) {
             <option>Financiera de la agencia</option><option>Otra</option>
           </select>
         </label>
-        <label>Enganche (%)<input name="enganche" type="number" min="0" max="90" step="0.5" placeholder="p. ej. 20"></label>
+        <label>Enganche<span class="input-money"><input class="money" name="enganche" inputmode="decimal" placeholder="p. ej. 150,000.00"></span></label>
         <label>Plazo
           <select name="plazo">${[12, 24, 36, 48, 60, 72].map((m) => `<option value="${m}" ${m === 48 ? 'selected' : ''}>${m} meses</option>`).join('')}</select>
         </label>
@@ -70,7 +70,7 @@ export function render(root, { fiscal, mercado, catalogo }) {
       ${seguroElegido ? `<p class="hint">Hay una cotización elegida en el comparador de seguros: <strong>${esc(seguroElegido.aseguradora)}</strong> por ${mxn(seguroElegido.primaAnual)} al año. <button type="button" class="btn-link" id="usarSeguro">Usarla</button></p>` : `<p class="hint">¿Aún no tienes la prima? Compárala en <a href="#/seguro">Seguro de auto</a>.</p>`}
 
       <label class="check"><input type="checkbox" name="ivaInt" checked> Cobrar IVA sobre intereses (${pct(iva.tasaGeneral, 0)})</label>
-      <p class="hint">Los intereses de créditos automotrices a personas físicas causan IVA a la tasa general del art. 1o. de la LIVA; solo los créditos hipotecarios para casa habitación están exentos (art. 15, fr. X, inciso d).</p>
+      <p class="hint">Los intereses de créditos automotrices a personas físicas causan IVA a la tasa general del art. 1o. de la LIVA; solo los créditos hipotecarios para casa habitación están exentos (art. 15, fr. X, inciso d). La mensualidad se fija con la tasa mensual más IVA (tasa anual ÷ 12 × ${(1 + iva.tasaGeneral / 100).toFixed(2)}); la tabla separa interés e IVA de cada mes. Tasa fija durante todo el plazo.</p>
     </form>
 
     <section class="card results" aria-live="polite">
@@ -115,22 +115,26 @@ export function render(root, { fiscal, mercado, catalogo }) {
 
   const calcular = () => {
     actualizarLinks();
-    const precio = val(f, 'precio');
-    const tasa = val(f, 'tasa');
-    if (!(precio > 0) || !(tasa >= 0) || f.tasa.value === '') {
-      $('#out', root).innerHTML = '<p class="empty">Captura el precio y la tasa para calcular.</p>';
+    const { leer, errores, error } = lector(f);
+    const precio = leer('precio', { etiqueta: 'el precio de lista', requerido: true, min: 0.01, moneda: true });
+    const descuento = leer('descuento', { etiqueta: 'el descuento', moneda: true });
+    const enganche = leer('enganche', { etiqueta: 'el enganche', moneda: true });
+    const tasa = leer('tasa', { etiqueta: 'la tasa de interés anual', requerido: true, max: 200, pct: true });
+    const comPct = leer('comision', { etiqueta: 'la comisión por apertura', max: 100, pct: true });
+    const seguro = leer('seguro', { etiqueta: 'el seguro de auto', moneda: true });
+    const vida = leer('seguroVida', { etiqueta: 'el seguro de vida/desempleo', moneda: true });
+    const neto = precio - descuento;
+    if (descuento > precio) error('El descuento no puede ser mayor que el precio de lista.');
+    else if (enganche >= neto) error(`El enganche debe ser menor que el precio neto (${mxn(neto)}).`);
+    if (errores.length) {
+      $('#out', root).innerHTML = errores.length === 2 && f.precio.value === '' && f.tasa.value === ''
+        ? '<p class="empty">Captura el precio y la tasa para calcular.</p>' : listaErrores(errores);
       $('#guardar', root).disabled = true; ultimo = null; return;
     }
-    const descuento = val(f, 'descuento') || 0;
-    const neto = Math.max(precio - descuento, 0);
-    const engPct = val(f, 'enganche') || 0;
-    const enganche = neto * engPct / 100;
+    const engPct = enganche / neto * 100;
     const plazo = +f.plazo.value;
     const anios = Math.ceil(plazo / 12);
-    const comPct = val(f, 'comision') || 0;
-    const seguro = val(f, 'seguro') || 0;
     const seguroFin = f.seguroModo.value === 'financiado';
-    const vida = val(f, 'seguroVida') || 0;
     const ivaInt = f.ivaInt.checked ? iva.tasaGeneral : 0;
 
     const base = neto - enganche + (seguroFin ? seguro * anios : 0);
@@ -157,7 +161,7 @@ export function render(root, { fiscal, mercado, catalogo }) {
     $('#out', root).innerHTML = `
       <div class="kpis">
         ${resultado('Mensualidad', mxn(am.pago), { grande: true, nota: `${plazo} pagos fijos${vida ? ', incluye seguro de vida/desempleo' : ''}` })}
-        ${resultado('Pago inicial', mxn(desembolso), { nota: `Enganche ${mxn(enganche)}${!comFin && comision ? ` + comisión ${mxn(comision)}` : ''}${!seguroFin && seguro ? ` + seguro año 1 ${mxn(seguro)}` : ''}` })}
+        ${resultado('Pago inicial', mxn(desembolso), { nota: `Enganche ${mxn(enganche)} (${pct(engPct)} del precio neto)${!comFin && comision ? ` + comisión ${mxn(comision)}` : ''}${!seguroFin && seguro ? ` + seguro año 1 ${mxn(seguro)}` : ''}` })}
         ${resultado('Monto financiado', mxn(principal))}
         ${resultado('CAT estimado (sin IVA)', pct(cat), { nota: 'Informativo. El CAT oficial lo publica cada institución.' })}
         ${resultado('Intereses', mxn(am.totalInteres))}

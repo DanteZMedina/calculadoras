@@ -1,4 +1,4 @@
-import { $, bindMoney, esc, mxn, money, num, parse } from '../util.js';
+import { $, bindMoney, esc, mxn, money, num, parse, fecha } from '../util.js';
 import { panelFuentes, tabla, enlaces } from '../componentes.js';
 
 const CLAVE = 'calculadoras-mx:cotizaciones-seguro:v1';
@@ -45,6 +45,7 @@ export function render(root, { fiscal, catalogo }) {
   </section>
 
   ${panelFuentes([iva.fuente], { generado: fiscal.generado, avisos: fiscal.avisos, extra: `
+    <p class="nota">Este sitio no es agente ni intermediario de seguros: no vende pólizas, no recibe comisiones y no envía tus datos a ninguna aseguradora. Los resultados se ordenan solo por los montos que capturas.</p>
     <p class="nota">Las primas de seguro se calculan con el perfil del conductor, código postal y modelo; no existen tarifas públicas, por eso se capturan desde el cotizador oficial de cada aseguradora. El IVA se aplica con la tasa general vigente de la LIVA.</p>
     ${enlaces([...aseg, ...catalogo.referencias.filter((r) => /AMIS|CONDUSEF/.test(r.nombre))])}` })}
   `;
@@ -71,6 +72,7 @@ export function render(root, { fiscal, catalogo }) {
           <label>Forma de pago<select data-k="pago">${Object.keys(PAGOS).map((p) => `<option value="${p}" ${p === c.pago ? 'selected' : ''}>${p[0].toUpperCase() + p.slice(1)}</option>`).join('')}</select></label>
           <label>Deducible daños materiales (%)<input type="number" step="0.5" min="0" data-k="dedDM" value="${c.dedDM ?? ''}" placeholder="p. ej. 5"></label>
           <label>Deducible robo total (%)<input type="number" step="0.5" min="0" data-k="dedRT" value="${c.dedRT ?? ''}" placeholder="p. ej. 10"></label>
+          <label>Fecha de la cotización<input type="date" data-k="fecha" value="${esc(c.fecha ?? '')}"></label>
         </div>
       </fieldset>`).join('');
     bindMoney($('#cots', root));
@@ -78,8 +80,21 @@ export function render(root, { fiscal, catalogo }) {
 
   const calcular = () => {
     guardarCot(cot);
-    const S = parse(suma.value);
+    const S = suma.value.trim() === '' ? NaN : parse(suma.value);
     const desglose = modo.value === 'desglose';
+    const errores = [];
+    if (suma.value.trim() !== '' && !(S > 0)) errores.push('Suma asegurada: escribe un monto mayor a cero, por ejemplo 450,000.00.');
+    cot.forEach((c, i) => {
+      const n = `Cotización ${i + 1}`;
+      for (const [k, et, max] of [['prima', 'la prima', Infinity], ['expedicion', 'los gastos de expedición', Infinity], ['recargo', 'el recargo', 100], ['dedDM', 'el deducible de daños', 100], ['dedRT', 'el deducible de robo', 100]]) {
+        const v = c[k];
+        if (v == null || v === '' ) continue;
+        if (!Number.isFinite(v)) errores.push(`${n}: ${et} debe ser un número.`);
+        else if (v < 0) errores.push(`${n}: ${et} no puede ser negativo.`);
+        else if (v > max) errores.push(`${n}: ${et} no puede ser mayor a ${max}%.`);
+      }
+    });
+    if (errores.length) { $('#out', root).innerHTML = errores.map((e) => `<p class="aviso">${esc(e)}</p>`).join(''); return; }
     const filas = cot.map((c) => {
       const prima = c.prima || 0;
       let subtotal, ivaMonto, total;
@@ -101,10 +116,14 @@ export function render(root, { fiscal, catalogo }) {
     const mejor = { total: min('total'), conDM: min('conDM'), dm: min('dm'), rt: min('rt') };
     const marca = (v, k) => (Number.isFinite(v) && v === mejor[k] && filas.length > 1 ? ' <span class="tag">mejor</span>' : '');
     const ganador = filas.find((r) => r.total === mejor.total);
+    const coberturas = new Set(filas.map((r) => r.cobertura));
+    const dedDistintos = new Set(filas.map((r) => `${r.dedDM}|${r.dedRT}`)).size > 1;
 
     $('#out', root).innerHTML = `
+      ${coberturas.size > 1 ? '<p class="aviso">Estás comparando coberturas distintas: la prima más baja puede cubrir menos. Compara Amplia con Amplia, Limitada con Limitada.</p>' : ''}
+      ${dedDistintos && filas.length > 1 ? '<p class="hint">Los deducibles son distintos entre cotizaciones; revisa la columna «Año con 1 siniestro».</p>' : ''}
       ${tabla([
-        { titulo: 'Aseguradora', valor: (r) => `${r.aseguradora} · ${r.cobertura}` },
+        { titulo: 'Aseguradora', valor: (r) => `${r.aseguradora} · ${r.cobertura}${r.fecha ? ` · ${fecha(r.fecha)}` : ''}` },
         { titulo: 'Prima anual total', num: 1, html: (r) => money(r.total) + marca(r.total, 'total') },
         { titulo: 'IVA incluido', num: 1, valor: (r) => money(r.ivaMonto) },
         { titulo: 'Pago por periodo', num: 1, valor: (r) => `${money(r.periodo)} ${r.pago}` },
@@ -120,7 +139,7 @@ export function render(root, { fiscal, catalogo }) {
     const k = e.target.dataset.k;
     if (!k) return;
     const i = +e.target.closest('.cot').dataset.i;
-    cot[i][k] = e.target.tagName === 'SELECT' ? e.target.value : parse(e.target.value);
+    cot[i][k] = e.target.tagName === 'SELECT' || e.target.type === 'date' ? e.target.value : parse(e.target.value);
     calcular();
   });
   $('#cots', root).addEventListener('click', (e) => {

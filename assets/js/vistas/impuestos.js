@@ -1,4 +1,4 @@
-import { $, bindMoney, esc, mxn, money, pct, pct4, val } from '../util.js';
+import { $, bindMoney, esc, mxn, money, pct, pct4, lector, listaErrores } from '../util.js';
 import { panelFuentes, tabla, resultado } from '../componentes.js';
 import { sueldo, honorarios, resico, ivaCalc, PERIODOS } from '../impuestos.js';
 
@@ -32,7 +32,11 @@ function marco(root, F, formHTML, fuentes, calcular) {
     ${panelFuentes(fuentes, { generado: F.generado, avisos: F.avisos })}`;
   const f = $('form', root);
   bindMoney(root);
-  const run = () => { $('.out', root).innerHTML = calcular(f); };
+  const run = () => {
+    const L = lector(f);
+    const html = calcular(f, L);
+    $('.out', root).innerHTML = L.errores.length ? listaErrores(L.errores) : html;
+  };
   f.addEventListener('input', run);
   f.addEventListener('change', run);
   run();
@@ -48,13 +52,16 @@ function vSueldo(root, F) {
       </label>
       <label>Sueldo bruto del periodo<span class="input-money"><input class="money" name="ingreso" inputmode="decimal" placeholder="0.00"></span></label>
       <label>Días cotizados al IMSS en el periodo<input name="dias" type="number" min="1" max="31" step="1" value="30"></label>
-      <label>Salario base de cotización diario (opcional)<span class="input-money"><input class="money" name="sbc" inputmode="decimal" placeholder="se estima"></span></label>
+      <label>SBC diario (opcional)<span class="input-money"><input class="money" name="sbc" inputmode="decimal" placeholder="se estima"></span></label>
     </div>
-    <p class="hint">Si no capturas el SBC, se estima con el factor de integración mínimo de ley: aguinaldo de ${F.lft.aguinaldoDias} días (art. 87 LFT), ${F.lft.vacacionesPrimerAnio} días de vacaciones (art. 76 LFT) y prima vacacional de ${pct(F.lft.primaVacacional, 0)} (art. 80 LFT). Se asume que todo el sueldo es gravado.</p>
-  `, [F.isr.fuente, F.subsidio.fuente, F.uma.fuente, F.salarioMinimo.fuente, F.imss.fuente, F.lft.fuente], (f) => {
-    const ingreso = val(f, 'ingreso');
-    if (!(ingreso > 0)) return '<p class="empty">Captura el sueldo bruto del periodo.</p>';
-    const r = sueldo(F, { ingreso, periodo: f.periodo.value, diasImss: val(f, 'dias') || PERIODOS[f.periodo.value].dias, sbcDiario: val(f, 'sbc') });
+    <p class="hint">SBC = salario base de cotización ante el IMSS. Si no lo capturas, se estima con el factor de integración mínimo de ley: aguinaldo de ${F.lft.aguinaldoDias} días (art. 87 LFT), ${F.lft.vacacionesPrimerAnio} días de vacaciones (art. 76 LFT) y prima vacacional de ${pct(F.lft.primaVacacional, 0)} (art. 80 LFT). Se asume que todo el sueldo es gravado.</p>
+  `, [F.isr.fuente, F.subsidio.fuente, F.uma.fuente, F.salarioMinimo.fuente, F.imss.fuente, F.lft.fuente], (f, { leer }) => {
+    if (f.ingreso.value.trim() === '') return '<p class="empty">Captura el sueldo bruto del periodo.</p>';
+    const ingreso = leer('ingreso', { etiqueta: 'el sueldo bruto', requerido: true, min: 0.01, moneda: true });
+    const dias = leer('dias', { etiqueta: 'los días cotizados', requerido: true, min: 1, max: 31 });
+    const sbcDiario = leer('sbc', { etiqueta: 'el SBC diario', moneda: true });
+    if (![ingreso, dias, sbcDiario].every(Number.isFinite)) return '';
+    const r = sueldo(F, { ingreso, periodo: f.periodo.value, diasImss: dias, sbcDiario });
     const tr = r.t.tramo;
     return `
       <div class="kpis">
@@ -97,9 +104,10 @@ function vHonorarios(root, F) {
       <label>Importe de los servicios (sin IVA)<span class="input-money"><input class="money" name="monto" inputmode="decimal" placeholder="0.00"></span></label>
     </div>
     <label class="check"><input type="checkbox" name="pm" checked> El cliente es persona moral (debe retener ISR e IVA)</label>
-  `, [F.honorarios.fuente, F.iva.fuente, F.iva.fuenteRetencion], (f) => {
-    const monto = val(f, 'monto');
-    if (!(monto > 0)) return '<p class="empty">Captura el importe de tus servicios.</p>';
+  `, [F.honorarios.fuente, F.iva.fuente, F.iva.fuenteRetencion], (f, { leer }) => {
+    if (f.monto.value.trim() === '') return '<p class="empty">Captura el importe de tus servicios.</p>';
+    const monto = leer('monto', { etiqueta: 'el importe', requerido: true, min: 0.01, moneda: true });
+    if (!Number.isFinite(monto)) return '';
     const r = honorarios(F, { monto, clientePM: f.pm.checked });
     return `
       <div class="kpis">
@@ -125,10 +133,15 @@ function vResico(root, F) {
       <label>Ingresos cobrados del mes (sin IVA)<span class="input-money"><input class="money" name="ingresos" inputmode="decimal" placeholder="0.00"></span></label>
       <label>De ellos, cobrados a personas morales<span class="input-money"><input class="money" name="pm" inputmode="decimal" placeholder="0.00"></span></label>
     </div>
-  `, [F.resico.fuente, F.iva.fuente], (f) => {
-    const ingresos = val(f, 'ingresos');
-    if (!(ingresos > 0)) return '<p class="empty">Captura tus ingresos cobrados del mes.</p>';
-    const r = resico(F, { ingresos, facturadoPM: val(f, 'pm') });
+    <label class="check"><input type="checkbox" name="servicios" checked> Lo cobrado a personas morales es por servicios profesionales o arrendamiento (te retienen dos terceras partes del IVA)</label>
+    <p class="hint">Aplica a personas físicas con ingresos de hasta ${money(F.resico.tablaMensual.at(-1).hasta)} al año (art. 113-E LISR).</p>
+  `, [F.resico.fuente, F.iva.fuente], (f, { leer, error }) => {
+    if (f.ingresos.value.trim() === '') return '<p class="empty">Captura tus ingresos cobrados del mes.</p>';
+    const ingresos = leer('ingresos', { etiqueta: 'los ingresos', requerido: true, min: 0.01, moneda: true });
+    const pm = leer('pm', { etiqueta: 'lo cobrado a personas morales', moneda: true });
+    if (pm > ingresos) error('Lo cobrado a personas morales no puede ser mayor que el total de ingresos.');
+    if (![ingresos, pm].every(Number.isFinite) || pm > ingresos) return '';
+    const r = resico(F, { ingresos, facturadoPM: pm, retieneIva: f.servicios.checked });
     if (r.excede) return `<p class="aviso">Los ingresos superan el límite de la tabla del art. 113-E (${money(F.resico.tablaMensual.at(-1).hasta)}).</p>`;
     return `
       <div class="kpis">
@@ -136,6 +149,8 @@ function vResico(root, F) {
         ${resultado('ISR causado', mxn(r.isr), { nota: `Tasa ${pct(r.tramo.tasa)} sobre ingresos de hasta ${money(r.tramo.hasta)}` })}
         ${resultado('ISR retenido por personas morales', mxn(r.retenido), { nota: `${pct(F.resico.retencionPersonaMoral)} (art. 113-J LISR)` })}
         ${resultado(`IVA trasladado ${pct(F.iva.tasaGeneral, 0)}`, mxn(r.iva))}
+        ${resultado('IVA retenido por personas morales', mxn(r.ivaRetenido), { nota: 'Dos terceras partes del IVA (art. 3 RLIVA)' })}
+        ${resultado('Recibes en el mes', mxn(r.neto), { nota: 'Ingresos + IVA − retenciones' })}
       </div>
       <h3>Tabla mensual art. 113-E LISR</h3>
       ${tabla([{ titulo: 'Ingresos mensuales hasta', num: 1, valor: (t) => money(t.hasta) }, { titulo: 'Tasa', num: 1, html: (t) => (t === r.tramo ? `<strong>${pct(t.tasa)}</strong>` : pct(t.tasa)) }], F.resico.tablaMensual, { simple: true })}`;
@@ -151,9 +166,10 @@ function vIva(root, F) {
         <select name="modo"><option value="agregar">Agregar IVA a un precio sin IVA</option><option value="desglosar">Desglosar IVA de un precio con IVA</option></select>
       </label>
     </div>
-  `, [F.iva.fuente], (f) => {
-    const monto = val(f, 'monto');
-    if (!(monto > 0)) return '<p class="empty">Captura un monto.</p>';
+  `, [F.iva.fuente], (f, { leer }) => {
+    if (f.monto.value.trim() === '') return '<p class="empty">Captura un monto.</p>';
+    const monto = leer('monto', { etiqueta: 'el monto', requerido: true, min: 0.01, moneda: true });
+    if (!Number.isFinite(monto)) return '';
     const r = ivaCalc(F, { monto, modo: f.modo.value });
     return `<div class="kpis">
       ${resultado('Subtotal', mxn(r.base))}

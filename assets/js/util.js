@@ -12,11 +12,41 @@ export const num = (v) => (Number.isFinite(v) ? fmtNum.format(v) : '—');
 export const pct = (v, dec = 2) => (Number.isFinite(v) ? `${v.toLocaleString('es-MX', { minimumFractionDigits: dec, maximumFractionDigits: dec })}%` : '—');
 export const pct4 = (v) => (Number.isFinite(v) ? `${fmtNum4.format(v)}%` : '—');
 
+/** Acepta "1,000,000", "1000000", "1000000.50", "$ 1,000.00" y "1.000.000"; cualquier otra cosa es NaN. */
 export const parse = (s) => {
   if (typeof s === 'number') return s;
-  const n = parseFloat(String(s ?? '').replace(/[^0-9.\-]/g, ''));
-  return Number.isFinite(n) ? n : NaN;
+  let t = String(s ?? '').trim().replace(/[\s$]/g, '').replace(/mxn$/i, '');
+  if ((t.match(/\./g) || []).length > 1) t = t.replace(/\./g, '');
+  t = t.replace(/,/g, '');
+  if (!/^-?(\d+\.?\d*|\.\d+)$/.test(t)) return NaN;
+  return parseFloat(t);
 };
+
+/**
+ * Lector de campos con validación. leer(name, {etiqueta, requerido, min, max}) devuelve el número,
+ * o NaN si es inválido (y agrega un mensaje en español a `errores`). Vacío y no requerido → 0.
+ */
+export function lector(form) {
+  const errores = [];
+  // tope de captura para montos: evita resultados con imprecisión de punto flotante
+  const leer = (name, { etiqueta = name, requerido = false, min = 0, moneda = false, pct = false, max = moneda ? 999999999.99 : Infinity } = {}) => {
+    const raw = (form.elements[name]?.value ?? '').trim();
+    if (raw === '') {
+      if (requerido) errores.push(`Captura ${etiqueta}.`);
+      return requerido ? NaN : 0;
+    }
+    const n = parse(raw);
+    const f = (x) => (moneda ? money(x) : `${num(x).replace(/\.00$/, '')}${pct ? '%' : ''}`);
+    if (!Number.isFinite(n)) errores.push(`Revisa ${etiqueta}: escribe solo números, por ejemplo ${moneda ? '150,000.00' : '12.5'}.`);
+    else if (n < min) errores.push(`Revisa ${etiqueta}: el mínimo es ${f(min)}.`);
+    else if (n > max) errores.push(`Revisa ${etiqueta}: el máximo es ${f(max)}.`);
+    else return n;
+    return NaN;
+  };
+  return { leer, errores, error: (m) => errores.push(m) };
+}
+
+export const listaErrores = (errores) => errores.map((e) => `<p class="aviso">${esc(e)}</p>`).join('');
 
 export const $ = (sel, root = document) => root.querySelector(sel);
 export const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];

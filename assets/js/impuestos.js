@@ -68,12 +68,15 @@ export function honorarios(F, { monto, clientePM }) {
 }
 
 /** Régimen Simplificado de Confianza, persona física: pago mensual (art. 113-E) y retención (113-J). */
-export function resico(F, { ingresos, facturadoPM }) {
+export function resico(F, { ingresos, facturadoPM, retieneIva = false }) {
   const tabla = F.resico.tablaMensual;
   const tramo = tabla.find((t) => ingresos <= t.hasta) ?? null;
   const isr = tramo ? ingresos * tramo.tasa / 100 : NaN;
-  const retenido = Math.min(facturadoPM || 0, ingresos) * F.resico.retencionPersonaMoral / 100;
-  return { tramo, isr, retenido, aPagar: Math.max(isr - retenido, 0), iva: ingresos * F.iva.tasaGeneral / 100, excede: !tramo };
+  const pm = Math.min(facturadoPM || 0, ingresos);
+  const retenido = pm * F.resico.retencionPersonaMoral / 100;
+  const iva = ingresos * F.iva.tasaGeneral / 100;
+  const ivaRetenido = retieneIva ? pm * F.iva.tasaGeneral / 100 * F.iva.retencionPersonasFisicasFraccion : 0;
+  return { tramo, isr, retenido, aPagar: Math.max(isr - retenido, 0), iva, ivaRetenido, neto: ingresos + iva - retenido - ivaRetenido, excede: !tramo };
 }
 
 export function ivaCalc(F, { monto, modo }) {
