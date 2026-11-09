@@ -438,7 +438,7 @@
     "fuente": {
       "nombre": "Anexo 8 de la Resolución Miscelánea Fiscal para 2026 (SAT)",
       "url": "https://www.sat.gob.mx/minisitio/NormatividadRMFyRGCE/documentos2026/rmf/anexos/Anexo-8-RMF-2026_DOF-28122025.pdf",
-      "consultado": "2026-11-02",
+      "consultado": "2026-11-09",
       "publicacion": "DOF 28 de diciembre de 2025",
       "fundamento": "Arts. 96, 97 y 152 de la LISR; art. 175 RLISR; regla 3.12.2 RMF"
     }
@@ -451,7 +451,7 @@
     "fuente": {
       "nombre": "Decreto que modifica el diverso que otorga el subsidio para el empleo (DOF)",
       "url": "https://dof.gob.mx/nota_detalle.php?codigo=5777649&fecha=31/12/2025",
-      "consultado": "2026-11-02",
+      "consultado": "2026-11-09",
       "publicacion": "DOF 31/12/2025",
       "fundamento": "Artículo Segundo del Decreto y transitorios"
     }
@@ -464,7 +464,7 @@
     "fuente": {
       "nombre": "Unidad de Medida y Actualización, INEGI (publicación en DOF)",
       "url": "https://dof.gob.mx/nota_detalle.php?codigo=5778072&fecha=09/01/2026",
-      "consultado": "2026-11-02",
+      "consultado": "2026-11-09",
       "fundamento": "Ley para Determinar el Valor de la UMA, art. 5"
     }
   },
@@ -476,7 +476,7 @@
     "fuente": {
       "nombre": "Resolución del Consejo de Representantes de la CONASAMI (DOF)",
       "url": "https://dof.gob.mx/nota_detalle.php?codigo=5775534&fecha=09/12/2025",
-      "consultado": "2026-11-02",
+      "consultado": "2026-11-09",
       "fundamento": "Art. 94 y 570 LFT; CDMX pertenece a la Zona del Salario Mínimo General"
     }
   },
@@ -487,14 +487,14 @@
     "fuente": {
       "nombre": "Ley del Impuesto al Valor Agregado (Cámara de Diputados, texto vigente)",
       "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/LIVA.pdf",
-      "consultado": "2026-11-02",
+      "consultado": "2026-11-09",
       "ultimaReforma": "12-11-2021",
       "fundamento": "Art. 1o. LIVA (tasa); art. 15 fr. X inciso d) (intereses hipotecarios exentos)"
     },
     "fuenteRetencion": {
       "nombre": "Reglamento de la Ley del IVA",
       "url": "https://www.diputados.gob.mx/LeyesBiblio/regley/Reg_LIVA_250914.pdf",
-      "consultado": "2026-11-02",
+      "consultado": "2026-11-09",
       "fundamento": "Art. 3, fracción I RLIVA"
     }
   },
@@ -537,7 +537,7 @@
     "fuente": {
       "nombre": "Ley del Seguro Social (Cámara de Diputados, texto vigente)",
       "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/LSS.pdf",
-      "consultado": "2026-11-02",
+      "consultado": "2026-11-09",
       "ultimaReforma": "15-01-2026",
       "fundamento": "Arts. 25, 28, 36, 106, 107, 147 y 168 LSS. Las referencias a salario mínimo se aplican en UMA (reforma constitucional DOF 27-01-2016)"
     }
@@ -549,7 +549,7 @@
     "fuente": {
       "nombre": "Ley Federal del Trabajo (Cámara de Diputados, texto vigente)",
       "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/LFT.pdf",
-      "consultado": "2026-11-02",
+      "consultado": "2026-11-09",
       "ultimaReforma": "14-05-2026",
       "fundamento": "Arts. 76, 80 y 87 LFT"
     }
@@ -559,7 +559,7 @@
     "fuente": {
       "nombre": "Ley del Impuesto sobre la Renta (texto vigente)",
       "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/LISR.pdf",
-      "consultado": "2026-11-02",
+      "consultado": "2026-11-09",
       "ultimaReforma": "01-04-2024",
       "fundamento": "Art. 106, último párrafo LISR"
     }
@@ -591,11 +591,11 @@
     "fuente": {
       "nombre": "Ley del Impuesto sobre la Renta (texto vigente)",
       "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/LISR.pdf",
-      "consultado": "2026-11-02",
+      "consultado": "2026-11-09",
       "ultimaReforma": "01-04-2024",
       "fundamento": "Arts. 113-E y 113-J LISR"
     }
   },
-  "generado": "2026-11-02T19:59:17-06:00",
+  "generado": "2026-11-09T16:55:29-06:00",
   "avisos": []
 }
